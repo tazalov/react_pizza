@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type PizzaBlockPT = {
-  // Добавьте свойства пропсов здесь
+  title: string;
+  price: number;
 };
 
-export function PizzaBlock(props: PizzaBlockPT) {
+export function PizzaBlock({ title, price }: PizzaBlockPT) {
+  const [doughType, setDoughType] = useState<'thick' | 'thin'>('thick');
+  const [pizzaCount, setPizzaCount] = useState<number>(0);
+
+  const setThickDoughType = () => {
+    setDoughType('thick');
+  };
+  const setThinDoughType = () => {
+    setDoughType('thin');
+  };
+
+  const incrPizzaCount = () => {
+    setPizzaCount((prev) => prev + 1);
+  };
+
   return (
     <div className="pizza-block">
       <img
@@ -12,21 +27,25 @@ export function PizzaBlock(props: PizzaBlockPT) {
         src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
         alt="Pizza"
       />
-      <h4 className="pizza-block__title">Чизбургер-пицца</h4>
+      <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          <li className="active">тонкое</li>
-          <li>традиционное</li>
+          <li className={doughType === 'thin' ? 'active' : undefined} onClick={setThinDoughType}>
+            thin
+          </li>
+          <li className={doughType === 'thick' ? 'active' : undefined} onClick={setThickDoughType}>
+            thick
+          </li>
         </ul>
         <ul>
-          <li className="active">26 см.</li>
-          <li>30 см.</li>
-          <li>40 см.</li>
+          <li className="active">26 cm.</li>
+          <li>30 cm.</li>
+          <li>40 cm.</li>
         </ul>
       </div>
       <div className="pizza-block__bottom">
-        <div className="pizza-block__price">от 395 ₽</div>
-        <div className="button button--outline button--add">
+        <div className="pizza-block__price">{price} RUB</div>
+        <div className="button button--outline button--add" onClick={incrPizzaCount}>
           <svg
             width="12"
             height="12"
@@ -38,8 +57,8 @@ export function PizzaBlock(props: PizzaBlockPT) {
               fill="white"
             />
           </svg>
-          <span>Добавить</span>
-          <i>2</i>
+          <span>Add to cart</span>
+          {pizzaCount > 0 && <i>{pizzaCount}</i>}
         </div>
       </div>
     </div>

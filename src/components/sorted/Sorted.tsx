@@ -19,14 +19,14 @@ export function Sorted(props: SortedPT) {
             fill="#2C2C2C"
           />
         </svg>
-        <b>Сортировка по:</b>
-        <span>популярности</span>
+        <b>Sort by:</b>
+        <span>most popular</span>
       </div>
       <div className="sort__popup">
         <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
+          <li className="active">most popular</li>
+          <li>price</li>
+          <li>alphabet</li>
         </ul>
       </div>
     </div>

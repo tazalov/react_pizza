@@ -15,17 +15,18 @@ function App() {
           <Categories />
           <Sorted />
         </div>
-        <h2 className="content__title">Все пиццы</h2>
+        <h2 className="content__title">All pizzas</h2>
         <div className="content__items">
-          <PizzaBlock />
-          <PizzaBlock />
-          <PizzaBlock />
-          <PizzaBlock />
-          <PizzaBlock />
-          <PizzaBlock />
-          <PizzaBlock />
-          <PizzaBlock />
-          <PizzaBlock />
+          <PizzaBlock title={'Margherita'} price={128} />
+          <PizzaBlock title={'Pepperoni'} price={456} />
+          <PizzaBlock title={'Hawaiian'} price={789} />
+          <PizzaBlock title={'Meat Lovers'} price={324} />
+          <PizzaBlock title={'BBQ Chicken'} price={345} />
+          <PizzaBlock title={'Veggie Supreme'} price={111} />
+          <PizzaBlock title={'Four Cheese'} price={555} />
+          <PizzaBlock title={'Supreme'} price={222} />
+          <PizzaBlock title={'Buffalo Chicken'} price={333} />
+          <PizzaBlock title={'Mushroom and Olive'} price={333} />
         </div>
       </Main>
     </div>
