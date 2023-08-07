@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 
 type PizzaBlockPT = {
+  id: number;
+  imageUrl: string;
   title: string;
+  types: number[];
+  sizes: number[];
   price: number;
+  category: number;
+  rating: number;
 };
 
-export function PizzaBlock({ title, price }: PizzaBlockPT) {
-  const [doughType, setDoughType] = useState<'thick' | 'thin'>('thick');
-  const [pizzaCount, setPizzaCount] = useState<number>(0);
+export function PizzaBlock({ title, price, imageUrl, sizes, types }: PizzaBlockPT) {
+  const typesName = ['thin', 'thick'];
 
-  const setThickDoughType = () => {
-    setDoughType('thick');
-  };
-  const setThinDoughType = () => {
-    setDoughType('thin');
-  };
+  const [doughType, setDoughType] = useState<number>(0);
+
+  const [sizeType, setSizeType] = useState<number>(0);
+
+  const [pizzaCount, setPizzaCount] = useState<number>(0);
 
   const incrPizzaCount = () => {
     setPizzaCount((prev) => prev + 1);
@@ -22,25 +26,25 @@ export function PizzaBlock({ title, price }: PizzaBlockPT) {
 
   return (
     <div className="pizza-block">
-      <img
-        className="pizza-block__image"
-        src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-        alt="Pizza"
-      />
+      <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
       <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          <li className={doughType === 'thin' ? 'active' : undefined} onClick={setThinDoughType}>
-            thin
-          </li>
-          <li className={doughType === 'thick' ? 'active' : undefined} onClick={setThickDoughType}>
-            thick
-          </li>
+          {types.map((el) => (
+            <li
+              key={el}
+              className={doughType === el ? 'active' : ''}
+              onClick={() => setDoughType(el)}>
+              {typesName[el]}
+            </li>
+          ))}
         </ul>
         <ul>
-          <li className="active">26 cm.</li>
-          <li>30 cm.</li>
-          <li>40 cm.</li>
+          {sizes.map((el, i) => (
+            <li key={i} className={sizeType === i ? 'active' : ''} onClick={() => setSizeType(i)}>
+              {el} cm.
+            </li>
+          ))}
         </ul>
       </div>
       <div className="pizza-block__bottom">
