@@ -1,5 +1,6 @@
 import logo from '../../assets/img/pizza-logo.svg';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 type HeaderPT = {
   // Добавьте свойства пропсов здесь
@@ -9,15 +10,17 @@ export function Header(props: HeaderPT) {
   return (
     <div className="header">
       <div className="container">
-        <div className="header__logo">
-          <img width="38" src={logo} alt="Pizza logo" />
-          <div>
-            <h1>React Pizza</h1>
-            <p>the most delicious pizza in the universe</p>
+        <NavLink to={'/'}>
+          <div className="header__logo">
+            <img width="38" src={logo} alt="Pizza logo" />
+            <div>
+              <h1>React Pizza</h1>
+              <p>the most delicious pizza in the universe</p>
+            </div>
           </div>
-        </div>
+        </NavLink>
         <div className="header__cart">
-          <a href="/cart.html" className="button button--cart">
+          <NavLink to="/cart" className="button button--cart">
             <span>520 RUB</span>
             <div className="button__delimiter"></div>
             <svg
@@ -49,7 +52,7 @@ export function Header(props: HeaderPT) {
               />
             </svg>
             <span>3</span>
-          </a>
+          </NavLink>
         </div>
       </div>
     </div>
