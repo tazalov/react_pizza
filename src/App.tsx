@@ -6,6 +6,7 @@ import { Categories } from './components/categories/Categories';
 import { Sorted } from './components/sorted/Sorted';
 import { PizzaBlock } from './components/pizza-block/PizzaBlock';
 import { Preloader } from './components/common/preloader/Preloader';
+import { Skeleton } from './components/pizza-block/Skeleton';
 
 type PizzaT = {
   id: number;
@@ -20,11 +21,15 @@ type PizzaT = {
 
 function App() {
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetch('https://64d38ae867b2662bf3dc6592.mockapi.io/api/items', { method: 'GET' })
       .then((response) => response.json())
-      .then((data) => setPizzas(data));
+      .then((data) => {
+        setPizzas(data);
+        setIsLoading(false);
+      });
   }, []);
 
   return (
@@ -37,7 +42,9 @@ function App() {
         </div>
         <h2 className="content__title">All pizzas</h2>
         <div className="content__items">
-          {pizzas.length ? pizzas.map((el) => <PizzaBlock key={el.id} {...el} />) : <Preloader />}
+          {isLoading
+            ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
+            : pizzas.map((el) => <PizzaBlock key={el.id} {...el} />)}
         </div>
       </Main>
     </div>
