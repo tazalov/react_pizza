@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type SortedPT = {
   // Добавьте свойства пропсов здесь
 };
 
 export function Sorted(props: SortedPT) {
+  const sortName = ['most popular', 'price', 'alphabet'];
+
+  const [currentSort, setCurrentSort] = useState<number>(0);
+  const [popupIsOpen, setPopupIsOpen] = useState<boolean>(false);
+
+  const togglePopup = () => {
+    setPopupIsOpen((prev) => !prev);
+  };
+
+  const setSortedBy = (num: number) => {
+    togglePopup();
+    setCurrentSort(num);
+  };
   return (
     <div className="sort">
       <div className="sort__label">
         <svg
+          style={{
+            transform: popupIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'all 0.3s ease',
+          }}
           width="10"
           height="6"
           viewBox="0 0 10 6"
@@ -20,15 +37,22 @@ export function Sorted(props: SortedPT) {
           />
         </svg>
         <b>Sort by:</b>
-        <span>most popular</span>
+        <span onClick={togglePopup}>{sortName[currentSort]}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">most popular</li>
-          <li>price</li>
-          <li>alphabet</li>
-        </ul>
-      </div>
+      {popupIsOpen && (
+        <div className="sort__popup">
+          <ul>
+            {sortName.map((el, i) => (
+              <li
+                key={i}
+                className={currentSort === i ? 'active' : ''}
+                onClick={() => setSortedBy(i)}>
+                {el}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
