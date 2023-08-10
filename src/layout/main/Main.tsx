@@ -5,9 +5,5 @@ type MainPT = {
 };
 
 export function Main({ children }: MainPT) {
-  return (
-    <main className="content">
-      <div className="container">{children}</div>
-    </main>
-  );
+  return <main className="content">{children}</main>;
 }

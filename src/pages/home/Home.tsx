@@ -30,9 +30,10 @@ export function Home(props: HomePT) {
         setPizzas(data);
         setIsLoading(false);
       });
+    window.scrollTo(0, 0);
   }, []);
   return (
-    <>
+    <div className="container">
       <div className="content__top">
         <Categories />
         <Sorted />
@@ -43,6 +44,6 @@ export function Home(props: HomePT) {
           ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
           : pizzas.map((el) => <PizzaBlock key={el.id} {...el} />)}
       </div>
-    </>
+    </div>
   );
 }
