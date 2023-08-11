@@ -1,33 +1,42 @@
 import React, { useState } from 'react';
+import { SortNameT } from '../../pages/home/Home';
 
 type SortedPT = {
-  // Добавьте свойства пропсов здесь
+  type: SortNameT;
+  changeType: (sort: SortNameT) => void;
+  descOrder: boolean;
+  toggleDescOrder: () => void;
 };
 
-export function Sorted(props: SortedPT) {
-  const sortName = ['most popular', 'price', 'alphabet'];
+export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedPT) {
+  const sortName: SortNameT[] = [
+    { id: 0, name: 'most popular', sort: 'rating' },
+    { id: 1, name: 'price', sort: 'price' },
+    { id: 2, name: 'title', sort: 'title' },
+  ];
 
-  const [currentSort, setCurrentSort] = useState<number>(0);
   const [popupIsOpen, setPopupIsOpen] = useState<boolean>(false);
 
   const togglePopup = () => {
     setPopupIsOpen((prev) => !prev);
   };
 
-  const setSortedBy = (num: number) => {
+  const setSortedBy = (sort: SortNameT) => {
     togglePopup();
-    setCurrentSort(num);
+    changeType(sort);
   };
+
   return (
     <div className="sort">
       <div className="sort__label">
         <svg
+          onClick={toggleDescOrder}
           style={{
-            transform: popupIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            transform: descOrder ? 'rotate(180deg)' : 'rotate(0deg)',
             transition: 'all 0.3s ease',
           }}
-          width="10"
-          height="6"
+          width="20"
+          height="12"
           viewBox="0 0 10 6"
           fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -37,17 +46,17 @@ export function Sorted(props: SortedPT) {
           />
         </svg>
         <b>Sort by:</b>
-        <span onClick={togglePopup}>{sortName[currentSort]}</span>
+        <span onClick={togglePopup}>{type.name}</span>
       </div>
       {popupIsOpen && (
         <div className="sort__popup">
           <ul>
-            {sortName.map((el, i) => (
+            {sortName.map((el) => (
               <li
-                key={i}
-                className={currentSort === i ? 'active' : ''}
-                onClick={() => setSortedBy(i)}>
-                {el}
+                key={el.id}
+                className={el.sort === type.sort ? 'active' : ''}
+                onClick={() => setSortedBy(el)}>
+                {el.name}
               </li>
             ))}
           </ul>

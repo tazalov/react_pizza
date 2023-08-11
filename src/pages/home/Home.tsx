@@ -15,6 +15,14 @@ type PizzaT = {
   rating: number;
 };
 
+type SortT = 'rating' | 'price' | 'title';
+
+export type SortNameT = {
+  id: number;
+  name: string;
+  sort: SortT;
+};
+
 type HomePT = {
   // Добавьте свойства пропсов здесь
 };
@@ -23,20 +31,44 @@ export function Home(props: HomePT) {
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [categoryId, setCategoryId] = useState<number>(0);
+
+  const [sortType, setSortType] = useState<SortNameT>({
+    id: 0,
+    name: 'most popular',
+    sort: 'rating',
+  });
+
+  const [descOrder, setDescOrder] = useState<boolean>(false);
+  const toggleDescOrder = () => setDescOrder((prev) => !prev);
+
   useEffect(() => {
-    fetch('https://64d38ae867b2662bf3dc6592.mockapi.io/api/items', { method: 'GET' })
+    setIsLoading(true);
+    fetch(
+      `https://64d38ae867b2662bf3dc6592.mockapi.io/api/items?order=${descOrder ? 'desc' : 'asc'}&${
+        categoryId ? 'category=' + categoryId : ''
+      }&sortBy=${sortType.sort}`,
+      {
+        method: 'GET',
+      },
+    )
       .then((response) => response.json())
       .then((data) => {
         setPizzas(data);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, []);
+  }, [categoryId, sortType, descOrder]);
   return (
     <div className="container">
       <div className="content__top">
-        <Categories />
-        <Sorted />
+        <Categories id={categoryId} changeId={setCategoryId} />
+        <Sorted
+          type={sortType}
+          changeType={setSortType}
+          descOrder={descOrder}
+          toggleDescOrder={toggleDescOrder}
+        />
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">
