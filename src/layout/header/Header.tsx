@@ -1,12 +1,14 @@
 import logo from '../../assets/img/pizza-logo.svg';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Search } from '../../components/search/Search';
 
 type HeaderPT = {
-  // Добавьте свойства пропсов здесь
+  search: string;
+  setSearch: (value: string) => void;
 };
 
-export function Header(props: HeaderPT) {
+export function Header({ search, setSearch }: HeaderPT) {
   return (
     <div className="header">
       <div className="container">
@@ -19,6 +21,7 @@ export function Header(props: HeaderPT) {
             </div>
           </div>
         </NavLink>
+        <Search search={search} setSearch={setSearch} />
         <div className="header__cart">
           <NavLink to="/cart" className="button button--cart">
             <span>520 RUB</span>

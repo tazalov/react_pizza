@@ -3,6 +3,7 @@ import { Sorted } from '../../components/sorted/Sorted';
 import { Skeleton } from '../../components/pizza-block/Skeleton';
 import { PizzaBlock } from '../../components/pizza-block/PizzaBlock';
 import React, { useEffect, useState } from 'react';
+import { ErrorBlock } from '../../components/errorBlock/ErrorBlock';
 
 type PizzaT = {
   id: number;
@@ -24,10 +25,10 @@ export type SortNameT = {
 };
 
 type HomePT = {
-  // Добавьте свойства пропсов здесь
+  search: string;
 };
 
-export function Home(props: HomePT) {
+export function Home({ search }: HomePT) {
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -47,7 +48,7 @@ export function Home(props: HomePT) {
     fetch(
       `https://64d38ae867b2662bf3dc6592.mockapi.io/api/items?order=${descOrder ? 'desc' : 'asc'}&${
         categoryId ? 'category=' + categoryId : ''
-      }&sortBy=${sortType.sort}`,
+      }&sortBy=${sortType.sort}&${search ? 'title=' + search : ''}`,
       {
         method: 'GET',
       },
@@ -58,7 +59,7 @@ export function Home(props: HomePT) {
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, descOrder]);
+  }, [categoryId, sortType, descOrder, search]);
   return (
     <div className="container">
       <div className="content__top">
@@ -72,6 +73,7 @@ export function Home(props: HomePT) {
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">
+        {search && <ErrorBlock title={'Not found'} description={''} />}
         {isLoading
           ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
           : pizzas.map((el) => <PizzaBlock key={el.id} {...el} />)}
