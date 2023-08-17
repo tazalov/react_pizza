@@ -4,6 +4,7 @@ import { Skeleton } from '../../components/pizza-block/Skeleton';
 import { PizzaBlock } from '../../components/pizza-block/PizzaBlock';
 import React, { useEffect, useState } from 'react';
 import { ErrorBlock } from '../../components/errorBlock/ErrorBlock';
+import { Paginator } from '../../components/common/paginator/Paginator';
 
 type PizzaT = {
   id: number;
@@ -31,24 +32,26 @@ type HomePT = {
 export function Home({ search }: HomePT) {
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   const [categoryId, setCategoryId] = useState<number>(0);
-
   const [sortType, setSortType] = useState<SortNameT>({
     id: 0,
     name: 'most popular',
     sort: 'rating',
   });
-
   const [descOrder, setDescOrder] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const toggleDescOrder = () => setDescOrder((prev) => !prev);
 
   useEffect(() => {
     setIsLoading(true);
+
+    const order = `order=${descOrder ? 'desc' : 'asc'}`;
+    const category = categoryId ? `category=${categoryId}` : '';
+    const sort = sortType.sort;
+    const searchValue = search ? `&title=${search}` : '';
+
     fetch(
-      `https://64d38ae867b2662bf3dc6592.mockapi.io/api/items?order=${descOrder ? 'desc' : 'asc'}&${
-        categoryId ? 'category=' + categoryId : ''
-      }&sortBy=${sortType.sort}&${search ? 'title=' + search : ''}`,
+      `https://64d38ae867b2662bf3dc6592.mockapi.io/api/items?page=${currentPage}&limit=4&${order}&${category}&sortBy=${sort}${searchValue}`,
       {
         method: 'GET',
       },
@@ -59,7 +62,7 @@ export function Home({ search }: HomePT) {
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, descOrder, search]);
+  }, [categoryId, sortType, descOrder, search, currentPage]);
   return (
     <div className="container">
       <div className="content__top">
@@ -72,10 +75,11 @@ export function Home({ search }: HomePT) {
         />
       </div>
       <h2 className="content__title">All pizzas</h2>
+      <Paginator changePage={setCurrentPage} />
+      {!pizzas.length && <ErrorBlock title={'Not found'} description={''} />}
       <div className="content__items">
-        {search && <ErrorBlock title={'Not found'} description={''} />}
         {isLoading
-          ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
+          ? [...new Array(4)].map((_, i) => <Skeleton key={i} />)
           : pizzas.map((el) => <PizzaBlock key={el.id} {...el} />)}
       </div>
     </div>
