@@ -5,7 +5,10 @@ import { PizzaBlock } from '../../components/pizza-block/PizzaBlock';
 import React, { useContext, useEffect, useState } from 'react';
 import { ErrorBlock } from '../../components/errorBlock/ErrorBlock';
 import { Paginator } from '../../components/common/paginator/Paginator';
-import { SearchContext } from '../../App';
+import { SearchContext } from '../../app/App';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { setCategoryId } from '../../redux/slice/categorySlice';
 
 type PizzaT = {
   id: number;
@@ -29,9 +32,15 @@ export type SortNameT = {
 type HomePT = {};
 
 export function Home({}: HomePT) {
+  const categoryId = useSelector((state: RootState) => state.categoryId);
+  const dispatch = useDispatch();
+
+  const changeCategoryId = (id: number) => {
+    dispatch(setCategoryId(id));
+  };
+
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [categoryId, setCategoryId] = useState<number>(0);
   const [sortType, setSortType] = useState<SortNameT>({
     id: 0,
     name: 'most popular',
@@ -68,7 +77,7 @@ export function Home({}: HomePT) {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories id={categoryId} changeId={setCategoryId} />
+        <Categories id={categoryId} changeId={changeCategoryId} />
         <Sorted
           type={sortType}
           changeType={setSortType}

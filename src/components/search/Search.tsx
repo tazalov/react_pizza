@@ -2,7 +2,7 @@ import s from './Search.module.scss';
 import searchIcon from '../../assets/img/icons8-search.svg';
 import closeIcon from '../../assets/img/icons8-close.svg';
 import { ChangeEvent, useContext } from 'react';
-import { SearchContext } from '../../App';
+import { SearchContext } from '../../app/App';
 
 type SearchPT = {};
 

@@ -1,10 +1,10 @@
-import './styles/scss/app.scss';
-import { Header } from './layout/header/Header';
-import { Main } from './layout/main/Main';
+import '../styles/scss/app.scss';
+import { Header } from '../layout/header/Header';
+import { Main } from '../layout/main/Main';
 import { Route, Routes } from 'react-router-dom';
-import { Home } from './pages/home/Home';
-import { Error } from './pages/error/Error';
-import { Cart } from './pages/cart/Cart';
+import { Home } from '../pages/home/Home';
+import { Error } from '../pages/error/Error';
+import { Cart } from '../pages/cart/Cart';
 import { createContext, useState } from 'react';
 
 type SearchContextT = {
