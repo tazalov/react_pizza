@@ -3,12 +3,9 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Search } from '../../components/search/Search';
 
-type HeaderPT = {
-  search: string;
-  setSearch: (value: string) => void;
-};
+type HeaderPT = {};
 
-export function Header({ search, setSearch }: HeaderPT) {
+export function Header({}: HeaderPT) {
   return (
     <div className="header">
       <div className="container">
@@ -21,7 +18,7 @@ export function Header({ search, setSearch }: HeaderPT) {
             </div>
           </div>
         </NavLink>
-        <Search search={search} setSearch={setSearch} />
+        <Search />
         <div className="header__cart">
           <NavLink to="/cart" className="button button--cart">
             <span>520 RUB</span>

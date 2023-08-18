@@ -2,9 +2,10 @@ import { Categories } from '../../components/categories/Categories';
 import { Sorted } from '../../components/sorted/Sorted';
 import { Skeleton } from '../../components/pizza-block/Skeleton';
 import { PizzaBlock } from '../../components/pizza-block/PizzaBlock';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ErrorBlock } from '../../components/errorBlock/ErrorBlock';
 import { Paginator } from '../../components/common/paginator/Paginator';
+import { SearchContext } from '../../App';
 
 type PizzaT = {
   id: number;
@@ -25,11 +26,9 @@ export type SortNameT = {
   sort: SortT;
 };
 
-type HomePT = {
-  search: string;
-};
+type HomePT = {};
 
-export function Home({ search }: HomePT) {
+export function Home({}: HomePT) {
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [categoryId, setCategoryId] = useState<number>(0);
@@ -41,6 +40,8 @@ export function Home({ search }: HomePT) {
   const [descOrder, setDescOrder] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const toggleDescOrder = () => setDescOrder((prev) => !prev);
+
+  const { search } = useContext(SearchContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -63,6 +64,7 @@ export function Home({ search }: HomePT) {
       });
     window.scrollTo(0, 0);
   }, [categoryId, sortType, descOrder, search, currentPage]);
+
   return (
     <div className="container">
       <div className="content__top">

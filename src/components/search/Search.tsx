@@ -1,14 +1,14 @@
 import s from './Search.module.scss';
 import searchIcon from '../../assets/img/icons8-search.svg';
 import closeIcon from '../../assets/img/icons8-close.svg';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useContext } from 'react';
+import { SearchContext } from '../../App';
 
-type SearchPT = {
-  search: string;
-  setSearch: (value: string) => void;
-};
+type SearchPT = {};
 
-export function Search({ search, setSearch }: SearchPT) {
+export function Search({}: SearchPT) {
+  const { search, setSearch } = useContext(SearchContext);
+
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.currentTarget.value);
   };
