@@ -2,7 +2,7 @@ import s from './Paginator.module.scss';
 import ReactPaginate from 'react-paginate';
 
 type PaginatorPT = {
-  changePage: (value: number) => void;
+  changePage: (page: number) => void;
 };
 
 export function Paginator({ changePage }: PaginatorPT) {

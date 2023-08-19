@@ -12,6 +12,7 @@ export type FilterST = {
   categoryId: number;
   sort: SortT;
   descOrder: boolean;
+  currentPage: number;
 };
 
 const initialState: FilterST = {
@@ -21,6 +22,7 @@ const initialState: FilterST = {
     property: 'rating',
   },
   descOrder: false,
+  currentPage: 1,
 };
 
 export const filterSlice = createSlice({
@@ -36,9 +38,24 @@ export const filterSlice = createSlice({
     toggleDescOrder: (state) => {
       state.descOrder = !state.descOrder;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
+    setFilterData: (state, action: PayloadAction<SetFilterAT>) => {
+      state.currentPage = +action.payload.page;
+      state.sort = action.payload.sort;
+      state.categoryId = +action.payload.category;
+    },
   },
 });
 
-export const { setCategoryId, setSortType, toggleDescOrder } = filterSlice.actions;
+export type SetFilterAT = {
+  page: string;
+  category: string;
+  sort: SortT;
+};
+
+export const { setCategoryId, setSortType, toggleDescOrder, setCurrentPage, setFilterData } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

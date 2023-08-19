@@ -8,13 +8,13 @@ type SortedPT = {
   toggleDescOrder: () => void;
 };
 
-export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedPT) {
-  const sortName: SortT[] = [
-    { name: 'most popular', property: 'rating' },
-    { name: 'price', property: 'price' },
-    { name: 'title', property: 'title' },
-  ];
+export const sortName: SortT[] = [
+  { name: 'most popular', property: 'rating' },
+  { name: 'price', property: 'price' },
+  { name: 'title', property: 'title' },
+];
 
+export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedPT) {
   const [popupIsOpen, setPopupIsOpen] = useState<boolean>(false);
 
   const togglePopup = () => {

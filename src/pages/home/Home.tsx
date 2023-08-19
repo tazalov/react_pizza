@@ -1,15 +1,25 @@
 import { Categories } from '../../components/categories/Categories';
-import { Sorted } from '../../components/sorted/Sorted';
+import { Sorted, sortName } from '../../components/sorted/Sorted';
 import { Skeleton } from '../../components/pizza-block/Skeleton';
 import { PizzaBlock } from '../../components/pizza-block/PizzaBlock';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ErrorBlock } from '../../components/errorBlock/ErrorBlock';
 import { Paginator } from '../../components/common/paginator/Paginator';
 import { SearchContext } from '../../app/App';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { setCategoryId, setSortType, toggleDescOrder, SortT } from '../../redux/slice/filterSlice';
+import {
+  setCategoryId,
+  setSortType,
+  toggleDescOrder,
+  SortT,
+  setCurrentPage,
+  setFilterData,
+  SetFilterAT,
+} from '../../redux/slice/filterSlice';
 import axios from 'axios';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
 type PizzaT = {
   id: number;
@@ -25,9 +35,22 @@ type PizzaT = {
 type HomePT = {};
 
 export function Home({}: HomePT) {
+  const { search } = useContext(SearchContext);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { categoryId, sort: sortType, descOrder } = useSelector((state: RootState) => state.filter);
+  const [pizzas, setPizzas] = useState<PizzaT[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const isRequestSend = useRef<boolean>(false);
+  const isAppMount = useRef<boolean>(false);
+
+  const {
+    categoryId,
+    sort: sortType,
+    descOrder,
+    currentPage,
+  } = useSelector((state: RootState) => state.filter);
 
   const changeCategoryId = (id: number) => {
     dispatch(setCategoryId(id));
@@ -38,14 +61,10 @@ export function Home({}: HomePT) {
   const changeDescOrder = () => {
     dispatch(toggleDescOrder());
   };
-
-  const [pizzas, setPizzas] = useState<PizzaT[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const { search } = useContext(SearchContext);
-
-  useEffect(() => {
+  const changeCurrentPage = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
+  const getPizzas = () => {
     const order = `order=${descOrder ? 'desc' : 'asc'}`;
     const category = categoryId ? `category=${categoryId}` : '';
     const sort = sortType.property;
@@ -59,6 +78,39 @@ export function Home({}: HomePT) {
         setPizzas(response.data);
         setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    if (isAppMount.current) {
+      const queryString = qs.stringify({
+        page: currentPage,
+        category: categoryId,
+        sort: sortType.property,
+      });
+      navigate(`?${queryString}`);
+    }
+    isAppMount.current = true;
+  }, [categoryId, sortType.property, currentPage]);
+
+  useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.slice(1));
+      const sortItem = sortName.find((el) => el.property === params.sort);
+      const filterParams: SetFilterAT = {
+        page: params.page as string,
+        category: params.category as string,
+        sort: sortItem as SortT,
+      };
+      dispatch(setFilterData(filterParams));
+      isRequestSend.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isRequestSend.current) getPizzas();
+
+    isRequestSend.current = false;
+
     window.scrollTo(0, 0);
   }, [categoryId, sortType.property, descOrder, search, currentPage]);
 
@@ -74,7 +126,7 @@ export function Home({}: HomePT) {
         />
       </div>
       <h2 className="content__title">All pizzas</h2>
-      <Paginator changePage={setCurrentPage} />
+      <Paginator changePage={changeCurrentPage} />
       {!pizzas.length && <ErrorBlock title={'Not found'} description={''} />}
       <div className="content__items">
         {isLoading
