@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-export type initialStateT = {
+export type CategoryST = {
   categoryId: number;
 };
 
-const initialState: initialStateT = {
+const initialState: CategoryST = {
   categoryId: 0,
 };
 

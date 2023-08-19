@@ -1,9 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import categoryReducer from './slice/categorySlice';
+import sortReducer from './slice/sortSlice';
+
+const rootReducer = combineReducers({
+  category: categoryReducer,
+  sort: sortReducer,
+});
 
 export const store = configureStore({
-  reducer: categoryReducer,
+  reducer: rootReducer,
 });
+
+//@ts-ignore
+window.store = store;
 
 export type RootState = ReturnType<typeof store.getState>;
 

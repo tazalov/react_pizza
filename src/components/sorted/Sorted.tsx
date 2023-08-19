@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { SortNameT } from '../../pages/home/Home';
+import { SortST } from '../../redux/slice/sortSlice';
 
 type SortedPT = {
-  type: SortNameT;
-  changeType: (sort: SortNameT) => void;
+  type: SortST;
+  changeType: (sort: SortST) => void;
   descOrder: boolean;
   toggleDescOrder: () => void;
 };
 
 export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedPT) {
-  const sortName: SortNameT[] = [
-    { id: 0, name: 'most popular', sort: 'rating' },
-    { id: 1, name: 'price', sort: 'price' },
-    { id: 2, name: 'title', sort: 'title' },
+  const sortName: SortST[] = [
+    { id: 0, sort: { name: 'most popular', property: 'rating' } },
+    { id: 1, sort: { name: 'price', property: 'price' } },
+    { id: 2, sort: { name: 'title', property: 'title' } },
   ];
 
   const [popupIsOpen, setPopupIsOpen] = useState<boolean>(false);
@@ -21,7 +21,7 @@ export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedP
     setPopupIsOpen((prev) => !prev);
   };
 
-  const setSortedBy = (sort: SortNameT) => {
+  const setSortedBy = (sort: SortST) => {
     togglePopup();
     changeType(sort);
   };
@@ -46,7 +46,7 @@ export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedP
           />
         </svg>
         <b>Sort by:</b>
-        <span onClick={togglePopup}>{type.name}</span>
+        <span onClick={togglePopup}>{type.sort.name}</span>
       </div>
       {popupIsOpen && (
         <div className="sort__popup">
@@ -54,9 +54,9 @@ export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedP
             {sortName.map((el) => (
               <li
                 key={el.id}
-                className={el.sort === type.sort ? 'active' : ''}
+                className={el.sort.property === type.sort.property ? 'active' : ''}
                 onClick={() => setSortedBy(el)}>
-                {el.name}
+                {el.sort.name}
               </li>
             ))}
           </ul>

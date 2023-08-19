@@ -9,6 +9,7 @@ import { SearchContext } from '../../app/App';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { setCategoryId } from '../../redux/slice/categorySlice';
+import { setSortType, SortST } from '../../redux/slice/sortSlice';
 
 type PizzaT = {
   id: number;
@@ -21,31 +22,23 @@ type PizzaT = {
   rating: number;
 };
 
-type SortT = 'rating' | 'price' | 'title';
-
-export type SortNameT = {
-  id: number;
-  name: string;
-  sort: SortT;
-};
-
 type HomePT = {};
 
 export function Home({}: HomePT) {
-  const categoryId = useSelector((state: RootState) => state.categoryId);
   const dispatch = useDispatch();
 
+  const categoryId = useSelector((state: RootState) => state.category.categoryId);
   const changeCategoryId = (id: number) => {
     dispatch(setCategoryId(id));
   };
 
+  const sortType = useSelector((state: RootState) => state.sort);
+  const changeSortType = (sort: SortST) => {
+    dispatch(setSortType(sort));
+  };
+
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [sortType, setSortType] = useState<SortNameT>({
-    id: 0,
-    name: 'most popular',
-    sort: 'rating',
-  });
   const [descOrder, setDescOrder] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const toggleDescOrder = () => setDescOrder((prev) => !prev);
@@ -57,7 +50,7 @@ export function Home({}: HomePT) {
 
     const order = `order=${descOrder ? 'desc' : 'asc'}`;
     const category = categoryId ? `category=${categoryId}` : '';
-    const sort = sortType.sort;
+    const sort = sortType.sort.property;
     const searchValue = search ? `&title=${search}` : '';
 
     fetch(
@@ -80,7 +73,7 @@ export function Home({}: HomePT) {
         <Categories id={categoryId} changeId={changeCategoryId} />
         <Sorted
           type={sortType}
-          changeType={setSortType}
+          changeType={changeSortType}
           descOrder={descOrder}
           toggleDescOrder={toggleDescOrder}
         />
