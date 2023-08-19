@@ -11,6 +11,7 @@ export type SortT = {
 export type FilterST = {
   categoryId: number;
   sort: SortT;
+  descOrder: boolean;
 };
 
 const initialState: FilterST = {
@@ -19,6 +20,7 @@ const initialState: FilterST = {
     name: 'most popular',
     property: 'rating',
   },
+  descOrder: false,
 };
 
 export const filterSlice = createSlice({
@@ -31,9 +33,12 @@ export const filterSlice = createSlice({
     setSortType: (state, action: PayloadAction<SortT>) => {
       state.sort = action.payload;
     },
+    toggleDescOrder: (state) => {
+      state.descOrder = !state.descOrder;
+    },
   },
 });
 
-export const { setCategoryId, setSortType } = filterSlice.actions;
+export const { setCategoryId, setSortType, toggleDescOrder } = filterSlice.actions;
 
 export default filterSlice.reducer;

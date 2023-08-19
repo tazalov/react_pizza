@@ -8,7 +8,8 @@ import { Paginator } from '../../components/common/paginator/Paginator';
 import { SearchContext } from '../../app/App';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { setCategoryId, setSortType, SortT } from '../../redux/slice/filterSlice';
+import { setCategoryId, setSortType, toggleDescOrder, SortT } from '../../redux/slice/filterSlice';
+import axios from 'axios';
 
 type PizzaT = {
   id: number;
@@ -26,8 +27,7 @@ type HomePT = {};
 export function Home({}: HomePT) {
   const dispatch = useDispatch();
 
-  const categoryId = useSelector((state: RootState) => state.filter.categoryId);
-  const sortType = useSelector((state: RootState) => state.filter.sort);
+  const { categoryId, sort: sortType, descOrder } = useSelector((state: RootState) => state.filter);
 
   const changeCategoryId = (id: number) => {
     dispatch(setCategoryId(id));
@@ -35,36 +35,32 @@ export function Home({}: HomePT) {
   const changeSortType = (sort: SortT) => {
     dispatch(setSortType(sort));
   };
+  const changeDescOrder = () => {
+    dispatch(toggleDescOrder());
+  };
 
   const [pizzas, setPizzas] = useState<PizzaT[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [descOrder, setDescOrder] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const toggleDescOrder = () => setDescOrder((prev) => !prev);
 
   const { search } = useContext(SearchContext);
 
   useEffect(() => {
-    setIsLoading(true);
-
     const order = `order=${descOrder ? 'desc' : 'asc'}`;
     const category = categoryId ? `category=${categoryId}` : '';
     const sort = sortType.property;
     const searchValue = search ? `&title=${search}` : '';
-
-    fetch(
-      `https://64d38ae867b2662bf3dc6592.mockapi.io/api/items?page=${currentPage}&limit=4&${order}&${category}&sortBy=${sort}${searchValue}`,
-      {
-        method: 'GET',
-      },
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setPizzas(data);
+    setIsLoading(true);
+    axios
+      .get<PizzaT[]>(
+        `https://64d38ae867b2662bf3dc6592.mockapi.io/api/items?page=${currentPage}&limit=4&${order}&${category}&sortBy=${sort}${searchValue}`,
+      )
+      .then((response) => {
+        setPizzas(response.data);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, descOrder, search, currentPage]);
+  }, [categoryId, sortType.property, descOrder, search, currentPage]);
 
   return (
     <div className="container">
@@ -74,7 +70,7 @@ export function Home({}: HomePT) {
           type={sortType}
           changeType={changeSortType}
           descOrder={descOrder}
-          toggleDescOrder={toggleDescOrder}
+          toggleDescOrder={changeDescOrder}
         />
       </div>
       <h2 className="content__title">All pizzas</h2>
