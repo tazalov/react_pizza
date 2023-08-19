@@ -8,8 +8,7 @@ import { Paginator } from '../../components/common/paginator/Paginator';
 import { SearchContext } from '../../app/App';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { setCategoryId } from '../../redux/slice/categorySlice';
-import { setSortType, SortST } from '../../redux/slice/sortSlice';
+import { setCategoryId, setSortType, SortT } from '../../redux/slice/filterSlice';
 
 type PizzaT = {
   id: number;
@@ -27,13 +26,13 @@ type HomePT = {};
 export function Home({}: HomePT) {
   const dispatch = useDispatch();
 
-  const categoryId = useSelector((state: RootState) => state.category.categoryId);
+  const categoryId = useSelector((state: RootState) => state.filter.categoryId);
+  const sortType = useSelector((state: RootState) => state.filter.sort);
+
   const changeCategoryId = (id: number) => {
     dispatch(setCategoryId(id));
   };
-
-  const sortType = useSelector((state: RootState) => state.sort);
-  const changeSortType = (sort: SortST) => {
+  const changeSortType = (sort: SortT) => {
     dispatch(setSortType(sort));
   };
 
@@ -50,7 +49,7 @@ export function Home({}: HomePT) {
 
     const order = `order=${descOrder ? 'desc' : 'asc'}`;
     const category = categoryId ? `category=${categoryId}` : '';
-    const sort = sortType.sort.property;
+    const sort = sortType.property;
     const searchValue = search ? `&title=${search}` : '';
 
     fetch(

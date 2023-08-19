@@ -1,14 +1,10 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import categoryReducer from './slice/categorySlice';
-import sortReducer from './slice/sortSlice';
-
-const rootReducer = combineReducers({
-  category: categoryReducer,
-  sort: sortReducer,
-});
+import { configureStore } from '@reduxjs/toolkit';
+import filter from './slice/filterSlice';
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    filter,
+  },
 });
 
 //@ts-ignore

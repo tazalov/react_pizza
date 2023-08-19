@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { SortST } from '../../redux/slice/sortSlice';
+import { SortT } from '../../redux/slice/filterSlice';
 
 type SortedPT = {
-  type: SortST;
-  changeType: (sort: SortST) => void;
+  type: SortT;
+  changeType: (sort: SortT) => void;
   descOrder: boolean;
   toggleDescOrder: () => void;
 };
 
 export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedPT) {
-  const sortName: SortST[] = [
-    { id: 0, sort: { name: 'most popular', property: 'rating' } },
-    { id: 1, sort: { name: 'price', property: 'price' } },
-    { id: 2, sort: { name: 'title', property: 'title' } },
+  const sortName: SortT[] = [
+    { name: 'most popular', property: 'rating' },
+    { name: 'price', property: 'price' },
+    { name: 'title', property: 'title' },
   ];
 
   const [popupIsOpen, setPopupIsOpen] = useState<boolean>(false);
@@ -21,7 +21,7 @@ export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedP
     setPopupIsOpen((prev) => !prev);
   };
 
-  const setSortedBy = (sort: SortST) => {
+  const setSortedBy = (sort: SortT) => {
     togglePopup();
     changeType(sort);
   };
@@ -46,17 +46,17 @@ export function Sorted({ type, changeType, descOrder, toggleDescOrder }: SortedP
           />
         </svg>
         <b>Sort by:</b>
-        <span onClick={togglePopup}>{type.sort.name}</span>
+        <span onClick={togglePopup}>{type.name}</span>
       </div>
       {popupIsOpen && (
         <div className="sort__popup">
           <ul>
-            {sortName.map((el) => (
+            {sortName.map((el, i) => (
               <li
-                key={el.id}
-                className={el.sort.property === type.sort.property ? 'active' : ''}
+                key={i}
+                className={el.property === type.property ? 'active' : ''}
                 onClick={() => setSortedBy(el)}>
-                {el.sort.name}
+                {el.name}
               </li>
             ))}
           </ul>
