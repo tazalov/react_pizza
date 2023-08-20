@@ -40,6 +40,7 @@ export const Home: FC<HomePT> = ({}) => {
   const dispatch = useDispatch()
 
   const [pizzas, setPizzas] = useState<PizzaT[]>([])
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const isRequestSend = useRef<boolean>(false)

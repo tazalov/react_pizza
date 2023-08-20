@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { SortT } from '../../redux/slice/filterSlice'
 
 type SortedPT = {
@@ -16,6 +16,7 @@ export const sortName: SortT[] = [
 
 export const Sorted: FC<SortedPT> = ({ type, changeType, descOrder, toggleDescOrder }) => {
   const [popupIsOpen, setPopupIsOpen] = useState<boolean>(false)
+  const sortRef = useRef<HTMLDivElement | null>(null)
 
   const togglePopup = () => {
     setPopupIsOpen(prev => !prev)
@@ -26,8 +27,20 @@ export const Sorted: FC<SortedPT> = ({ type, changeType, descOrder, toggleDescOr
     changeType(sort)
   }
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!e.composedPath().includes(sortRef.current!)) {
+        setPopupIsOpen(false)
+      }
+    }
+
+    document.body.addEventListener('click', handleClickOutside)
+
+    return () => document.body.removeEventListener('click', handleClickOutside)
+  }, [])
+
   return (
-    <div className="sort">
+    <div className="sort" ref={sortRef}>
       <div className="sort__label">
         <svg
           onClick={toggleDescOrder}

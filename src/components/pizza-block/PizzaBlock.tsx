@@ -1,4 +1,7 @@
 import { FC, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addProduct } from '../../redux/slice/cartSlice'
+import { RootState } from '../../redux/store'
 
 type PizzaBlockPT = {
   id: number
@@ -11,17 +14,34 @@ type PizzaBlockPT = {
   rating: number
 }
 
-export const PizzaBlock: FC<PizzaBlockPT> = ({ title, price, imageUrl, sizes, types }) => {
-  const typesName = ['thin', 'thick']
+export const PizzaBlock: FC<PizzaBlockPT> = ({ id, title, price, imageUrl, sizes, types }) => {
+  const doughTypeName = ['thin', 'thick']
+
+  const dispatch = useDispatch()
+
+  const addedCount = useSelector((state: RootState) => {
+    let count = 0
+    state.cart.items.forEach(el => {
+      if (el.id === id) count += el.count
+    })
+    return count
+  })
 
   const [doughType, setDoughType] = useState<number>(0)
 
   const [sizeType, setSizeType] = useState<number>(0)
 
-  const [pizzaCount, setPizzaCount] = useState<number>(0)
-
-  const incrPizzaCount = () => {
-    setPizzaCount(prev => prev + 1)
+  const addPizzaInCart = () => {
+    const pizza = {
+      id,
+      title,
+      price,
+      imageUrl,
+      size: sizeType,
+      dough: doughTypeName[doughType],
+      count: 0,
+    }
+    dispatch(addProduct(pizza))
   }
 
   return (
@@ -37,7 +57,7 @@ export const PizzaBlock: FC<PizzaBlockPT> = ({ title, price, imageUrl, sizes, ty
                 className={doughType === el ? 'active' : ''}
                 onClick={() => setDoughType(el)}
               >
-                {typesName[el]}
+                {doughTypeName[el]}
               </li>
             ))}
           </ul>
@@ -51,7 +71,7 @@ export const PizzaBlock: FC<PizzaBlockPT> = ({ title, price, imageUrl, sizes, ty
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">{price} RUB</div>
-          <div className="button button--outline button--add" onClick={incrPizzaCount}>
+          <div className="button button--outline button--add" onClick={addPizzaInCart}>
             <svg
               width="12"
               height="12"
@@ -65,7 +85,7 @@ export const PizzaBlock: FC<PizzaBlockPT> = ({ title, price, imageUrl, sizes, ty
               />
             </svg>
             <span>Add to cart</span>
-            {pizzaCount > 0 && <i>{pizzaCount}</i>}
+            {addedCount > 0 && <i>{addedCount}</i>}
           </div>
         </div>
       </div>
