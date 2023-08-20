@@ -1,14 +1,15 @@
-import s from './Paginator.module.scss';
-import ReactPaginate from 'react-paginate';
+import { FC } from 'react'
+import ReactPaginate from 'react-paginate'
+import s from './Paginator.module.scss'
 
 type PaginatorPT = {
-  changePage: (page: number) => void;
-};
+  changePage: (page: number) => void
+}
 
-export function Paginator({ changePage }: PaginatorPT) {
+export const Paginator: FC<PaginatorPT> = ({ changePage }) => {
   const onPageChangeHandler = (e: { selected: number }) => {
-    changePage(e.selected + 1);
-  };
+    changePage(e.selected + 1)
+  }
   return (
     <div className={s.wrapper}>
       <ReactPaginate
@@ -23,5 +24,5 @@ export function Paginator({ changePage }: PaginatorPT) {
         marginPagesDisplayed={10}
       />
     </div>
-  );
+  )
 }

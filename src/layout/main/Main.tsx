@@ -1,9 +1,7 @@
-import { ReactNode } from 'react';
+import { FC, ReactNode } from 'react'
 
 type MainPT = {
-  children: ReactNode;
-};
-
-export function Main({ children }: MainPT) {
-  return <main className="content">{children}</main>;
+  children: ReactNode
 }
+
+export const Main: FC<MainPT> = ({ children }) => <main className="content">{children}</main>

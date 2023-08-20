@@ -1,31 +1,31 @@
-import s from './Search.module.scss';
-import searchIcon from '../../assets/img/icons8-search.svg';
-import closeIcon from '../../assets/img/icons8-close.svg';
-import { ChangeEvent, useCallback, useContext, useRef, useState } from 'react';
-import { SearchContext } from '../../app/App';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce'
+import { ChangeEvent, FC, useCallback, useContext, useRef, useState } from 'react'
+import { SearchContext } from '../../app/App'
+import closeIcon from '../../assets/img/icons8-close.svg'
+import searchIcon from '../../assets/img/icons8-search.svg'
+import s from './Search.module.scss'
 
-type SearchPT = {};
+type SearchPT = {}
 
-export function Search({}: SearchPT) {
-  const [value, setValue] = useState<string>('');
-  const { setSearch } = useContext(SearchContext);
-  const searchInputRef = useRef<HTMLInputElement | null>(null);
+export const Search: FC<SearchPT> = ({}) => {
+  const [value, setValue] = useState<string>('')
+  const { setSearch } = useContext(SearchContext)
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   const updateSearchValue = useCallback(
-    debounce((str) => setSearch(str), 300),
+    debounce(str => setSearch(str), 300),
     [],
-  );
+  )
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.currentTarget.value);
-    updateSearchValue(e.currentTarget.value);
-  };
+    setValue(e.currentTarget.value)
+    updateSearchValue(e.currentTarget.value)
+  }
   const onClickClearHandler = () => {
-    setValue('');
-    setSearch('');
-    searchInputRef.current?.focus();
-  };
+    setValue('')
+    setSearch('')
+    searchInputRef.current?.focus()
+  }
 
   return (
     <div className={s.root}>
@@ -45,5 +45,5 @@ export function Search({}: SearchPT) {
         </div>
       )}
     </div>
-  );
+  )
 }

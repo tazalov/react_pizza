@@ -1,26 +1,26 @@
-import '../styles/scss/app.scss';
-import { Header } from '../layout/header/Header';
-import { Main } from '../layout/main/Main';
-import { Route, Routes } from 'react-router-dom';
-import { Home } from '../pages/home/Home';
-import { Error } from '../pages/error/Error';
-import { Cart } from '../pages/cart/Cart';
-import { createContext, useState } from 'react';
+import { createContext, useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { Header } from '../layout/header/Header'
+import { Main } from '../layout/main/Main'
+import { Cart } from '../pages/cart/Cart'
+import { Error } from '../pages/error/Error'
+import { Home } from '../pages/home/Home'
+import '../styles/scss/app.scss'
 
 type SearchContextT = {
-  search: string;
-  setSearch: (value: string) => void;
-};
+  search: string
+  setSearch: (value: string) => void
+}
 
 export const SearchContext = createContext<SearchContextT>({
   search: '',
-  setSearch: (value) => {
-    console.log('SearchContext empty');
+  setSearch: value => {
+    console.log('SearchContext empty')
   },
-});
+})
 
-function App() {
-  const [search, setSearch] = useState<string>('');
+export const App = () => {
+  const [search, setSearch] = useState<string>('')
   return (
     <div className="wrapper">
       <SearchContext.Provider value={{ search, setSearch }}>
@@ -34,7 +34,5 @@ function App() {
         </Main>
       </SearchContext.Provider>
     </div>
-  );
+  )
 }
-
-export default App;

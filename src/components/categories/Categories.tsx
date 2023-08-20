@@ -1,10 +1,12 @@
-type CategoriesPT = {
-  id: number;
-  changeId: (id: number) => void;
-};
+import { FC } from 'react'
 
-export function Categories({ id, changeId }: CategoriesPT) {
-  const categories = ['All', 'Meat', 'Vegetarian', 'Grill', 'Sharp', 'Closed'];
+type CategoriesPT = {
+  id: number
+  changeId: (id: number) => void
+}
+
+export const Categories: FC<CategoriesPT> = ({ id, changeId }) => {
+  const categories = ['All', 'Meat', 'Vegetarian', 'Grill', 'Sharp', 'Closed']
 
   return (
     <div className="categories">
@@ -16,5 +18,5 @@ export function Categories({ id, changeId }: CategoriesPT) {
         ))}
       </ul>
     </div>
-  );
+  )
 }
