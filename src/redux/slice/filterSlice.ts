@@ -10,6 +10,7 @@ export type SortT = {
 }
 
 export type FilterST = {
+  searchValue: string
   categoryId: number
   sort: SortT
   descOrder: boolean
@@ -23,6 +24,7 @@ export type SetFilterAT = {
 }
 
 const initialState: FilterST = {
+  searchValue: '',
   categoryId: 0,
   sort: {
     name: 'most popular',
@@ -36,6 +38,9 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
+    setSearchValue: (state, action: PayloadAction<string>) => {
+      state.searchValue = action.payload
+    },
     setCategoryId: (state, action: PayloadAction<number>) => {
       state.categoryId = action.payload
     },
@@ -58,9 +63,17 @@ export const filterSlice = createSlice({
 
 //! ---------- selectors ----------
 export const selectFilter = (state: RootState) => state.filter
+
+export const selectSearchValue = (state: RootState) => state.filter.searchValue
 //! ---------- selectors ----------
 
-export const { setCategoryId, setSortType, toggleDescOrder, setCurrentPage, setFilterData } =
-  filterSlice.actions
+export const {
+  setSearchValue,
+  setCategoryId,
+  setSortType,
+  toggleDescOrder,
+  setCurrentPage,
+  setFilterData,
+} = filterSlice.actions
 
 export default filterSlice.reducer

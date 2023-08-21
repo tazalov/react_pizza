@@ -1,17 +1,18 @@
 import debounce from 'lodash.debounce'
-import { ChangeEvent, FC, useCallback, useContext, useRef, useState } from 'react'
-import { SearchContext } from '../../app/App'
+import { ChangeEvent, FC, useCallback, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import closeIcon from '../../assets/img/icons8-close.svg'
 import searchIcon from '../../assets/img/icons8-search.svg'
+import { setSearchValue } from '../../redux/slice/filterSlice'
 import s from './Search.module.scss'
 
 export const Search: FC = () => {
+  const dispatch = useDispatch()
   const [value, setValue] = useState<string>('')
-  const { setSearch } = useContext(SearchContext)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   const updateSearchValue = useCallback(
-    debounce(str => setSearch(str), 300),
+    debounce(str => dispatch(setSearchValue(str)), 300),
     [],
   )
 
@@ -21,7 +22,7 @@ export const Search: FC = () => {
   }
   const onClickClearHandler = () => {
     setValue('')
-    setSearch('')
+    dispatch(setSearchValue(''))
     searchInputRef.current?.focus()
   }
 

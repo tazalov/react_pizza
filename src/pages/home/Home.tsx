@@ -1,8 +1,7 @@
 import qs from 'qs'
-import { FC, useContext, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { SearchContext } from '../../app/App'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Categories } from '../../components/categories/Categories'
 import { Paginator } from '../../components/common/paginator/Paginator'
 import { ErrorBlock } from '../../components/errorBlock/ErrorBlock'
@@ -23,14 +22,20 @@ import { fetchPizzas, selectPizzas } from '../../redux/slice/pizzasSlice'
 import { AppDispatch } from '../../redux/store'
 
 export const Home: FC = () => {
-  const { search } = useContext(SearchContext)
-  const navigate = useNavigate()
   const dispatch: AppDispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const isRequestSend = useRef<boolean>(false)
   const isAppMount = useRef<boolean>(false)
 
-  const { categoryId, sort: sortType, descOrder, currentPage } = useSelector(selectFilter)
+  const {
+    categoryId,
+    sort: sortType,
+    descOrder,
+    currentPage,
+    searchValue: search,
+  } = useSelector(selectFilter)
   const { items, status, error } = useSelector(selectPizzas)
 
   const changeCategoryId = (id: number) => {
@@ -57,7 +62,6 @@ export const Home: FC = () => {
       searchValue,
       currentPage,
     })
-
     dispatch(action)
   }
 
@@ -74,8 +78,8 @@ export const Home: FC = () => {
   }, [categoryId, sortType.property, currentPage])
 
   useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.slice(1))
+    if (location.search) {
+      const params = qs.parse(location.search.slice(1))
       const sortItem = sortName.find(el => el.property === params.sort)
       const filterParams: SetFilterAT = {
         page: params.page as string,
@@ -85,6 +89,7 @@ export const Home: FC = () => {
       dispatch(setFilterData(filterParams))
       isRequestSend.current = true
     }
+    isRequestSend.current = false
   }, [])
 
   useEffect(() => {
@@ -109,7 +114,7 @@ export const Home: FC = () => {
       <h2 className="content__title">All pizzas</h2>
       {status === 'error' ? (
         <ErrorBlock title={error} description={''} />
-      ) : (
+      ) : items.length ? (
         <>
           <Paginator changePage={changeCurrentPage} />
           <div className="content__items">
@@ -118,6 +123,8 @@ export const Home: FC = () => {
               : items.map(el => <PizzaBlock key={el.id} {...el} />)}
           </div>
         </>
+      ) : (
+        <ErrorBlock title={'Not found'} description={'Sorry'} />
       )}
     </div>
   )
