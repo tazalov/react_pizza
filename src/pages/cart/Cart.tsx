@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import emptyCart from '../../assets/img/empty-cart.png'
 import arrowLeft from '../../assets/img/grey-arrow-left.svg'
+import { EmptyCart } from '../../components/empty-cart/EmptyCart'
 import { PizzaBlockCart } from '../../components/pizza-block-cart/PizzaBlockCart'
 import { clearCart } from '../../redux/slice/cartSlice'
 import { RootState } from '../../redux/store'
@@ -25,16 +25,16 @@ export const Cart: FC<CartPT> = ({}) => {
 
   return (
     <div className="container container--cart">
-      <div className="cart">
-        <div className="cart__top">
-          <h2 className="content__title">Cart</h2>
-          <div className="cart__clear" onClick={removeAllItemsInCart}>
-            <span>Remove cart</span>
+      {items.length ? (
+        <div className="cart">
+          <div className="cart__top">
+            <h2 className="content__title">Cart</h2>
+            <div className="cart__clear" onClick={removeAllItemsInCart}>
+              <span>Remove cart</span>
+            </div>
           </div>
-        </div>
-        <div className="content__items">
-          {items.length ? (
-            items.map((el, i) => (
+          <div className="content__items">
+            {items.map((el, i) => (
               <PizzaBlockCart
                 key={i}
                 id={el.id}
@@ -45,31 +45,31 @@ export const Cart: FC<CartPT> = ({}) => {
                 size={el.size}
                 count={el.count}
               />
-            ))
-          ) : (
-            <img src={emptyCart} alt="emptyCart" />
-          )}
-        </div>
-        <div className="cart__bottom">
-          <div className="cart__bottom-details">
-            <span>
-              Total pizzas: <b>{countItems}</b>
-            </span>
-            <span>
-              Total price: <b>{totalPrice} RUB</b>{' '}
-            </span>
+            ))}
           </div>
-          <div className="cart__bottom-buttons">
-            <NavLink to="/" className="button button--outline button--add go-back-btn">
-              <img src={arrowLeft} alt="goBack" />
-              <span>Go back</span>
-            </NavLink>
-            <div className="button pay-btn">
-              <span>Pay now</span>
+          <div className="cart__bottom">
+            <div className="cart__bottom-details">
+              <span>
+                Total pizzas: <b>{countItems}</b>
+              </span>
+              <span>
+                Total price: <b>{totalPrice} RUB</b>{' '}
+              </span>
+            </div>
+            <div className="cart__bottom-buttons">
+              <NavLink to="/" className="button button--outline button--add go-back-btn">
+                <img src={arrowLeft} alt="goBack" />
+                <span>Go back</span>
+              </NavLink>
+              <div className="button pay-btn">
+                <span>Pay now</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <EmptyCart />
+      )}
     </div>
   )
 }
