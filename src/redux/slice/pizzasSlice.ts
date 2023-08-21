@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import pizzasAPI from '../../api/api'
+import { RootState } from '../store'
 
 type ParamsAT = {
   order: string
@@ -69,6 +70,10 @@ export const pizzasSlice = createSlice({
     })
   },
 })
+
+//! ---------- selectors ----------
+export const selectPizzas = (state: RootState) => state.pizzas
+//! ---------- selectors ----------
 
 export const { setItems } = pizzasSlice.actions
 

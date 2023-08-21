@@ -5,9 +5,7 @@ import closeIcon from '../../assets/img/icons8-close.svg'
 import searchIcon from '../../assets/img/icons8-search.svg'
 import s from './Search.module.scss'
 
-type SearchPT = {}
-
-export const Search: FC<SearchPT> = ({}) => {
+export const Search: FC = () => {
   const [value, setValue] = useState<string>('')
   const { setSearch } = useContext(SearchContext)
   const searchInputRef = useRef<HTMLInputElement | null>(null)

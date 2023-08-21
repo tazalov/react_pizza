@@ -10,6 +10,7 @@ import { PizzaBlock } from '../../components/pizza-block/PizzaBlock'
 import { Skeleton } from '../../components/pizza-block/Skeleton'
 import { Sorted, sortName } from '../../components/sorted/Sorted'
 import {
+  selectFilter,
   setCategoryId,
   setCurrentPage,
   SetFilterAT,
@@ -18,12 +19,10 @@ import {
   SortT,
   toggleDescOrder,
 } from '../../redux/slice/filterSlice'
-import { fetchPizzas } from '../../redux/slice/pizzasSlice'
-import { AppDispatch, RootState } from '../../redux/store'
+import { fetchPizzas, selectPizzas } from '../../redux/slice/pizzasSlice'
+import { AppDispatch } from '../../redux/store'
 
-type HomePT = {}
-
-export const Home: FC<HomePT> = ({}) => {
+export const Home: FC = () => {
   const { search } = useContext(SearchContext)
   const navigate = useNavigate()
   const dispatch: AppDispatch = useDispatch()
@@ -31,14 +30,8 @@ export const Home: FC<HomePT> = ({}) => {
   const isRequestSend = useRef<boolean>(false)
   const isAppMount = useRef<boolean>(false)
 
-  const {
-    categoryId,
-    sort: sortType,
-    descOrder,
-    currentPage,
-  } = useSelector((state: RootState) => state.filter)
-
-  const { items, status, error } = useSelector((state: RootState) => state.pizzas)
+  const { categoryId, sort: sortType, descOrder, currentPage } = useSelector(selectFilter)
+  const { items, status, error } = useSelector(selectPizzas)
 
   const changeCategoryId = (id: number) => {
     dispatch(setCategoryId(id))

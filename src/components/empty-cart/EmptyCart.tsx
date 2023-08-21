@@ -2,11 +2,7 @@ import { FC } from 'react'
 import { NavLink } from 'react-router-dom'
 import emptyCart from '../../assets/img/empty-cart.png'
 
-type EmptyCartPT = {
-  // add props type
-}
-
-export const EmptyCart: FC<EmptyCartPT> = ({}) => {
+export const EmptyCart: FC = () => {
   return (
     <div className="cart cart--empty">
       <h2>Cart is empty</h2>

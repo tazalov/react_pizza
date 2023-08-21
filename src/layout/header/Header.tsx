@@ -3,13 +3,11 @@ import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import logo from '../../assets/img/pizza-logo.svg'
 import { Search } from '../../components/search/Search'
-import { RootState } from '../../redux/store'
+import { selectCart } from '../../redux/slice/cartSlice'
 
-type HeaderPT = {}
-
-export const Header: FC<HeaderPT> = ({}) => {
-  const { totalPrice, items } = useSelector((state: RootState) => state.cart)
-  const countItems = items.reduce((acc, el) => (acc += el.count), 0)
+export const Header: FC = () => {
+  const { totalPrice, items } = useSelector(selectCart)
+  const countItems = items.reduce((acc, el) => acc + el.count, 0)
   return (
     <div className="header">
       <div className="container">

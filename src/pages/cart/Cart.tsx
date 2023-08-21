@@ -4,14 +4,9 @@ import { NavLink } from 'react-router-dom'
 import arrowLeft from '../../assets/img/grey-arrow-left.svg'
 import { EmptyCart } from '../../components/empty-cart/EmptyCart'
 import { PizzaBlockCart } from '../../components/pizza-block-cart/PizzaBlockCart'
-import { clearCart } from '../../redux/slice/cartSlice'
-import { RootState } from '../../redux/store'
+import { clearCart, selectCart } from '../../redux/slice/cartSlice'
 
-type CartPT = {
-  // Добавьте свойства пропсов здесь
-}
-
-export const Cart: FC<CartPT> = ({}) => {
+export const Cart: FC = () => {
   const dispatch = useDispatch()
 
   const removeAllItemsInCart = () => {
@@ -20,8 +15,8 @@ export const Cart: FC<CartPT> = ({}) => {
     }
   }
 
-  const { totalPrice, items } = useSelector((state: RootState) => state.cart)
-  const countItems = items.reduce((acc, el) => (acc += el.count), 0)
+  const { totalPrice, items } = useSelector(selectCart)
+  const countItems = items.reduce((acc, el) => acc + el.count, 0)
 
   return (
     <div className="container container--cart">
