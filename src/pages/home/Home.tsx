@@ -1,6 +1,5 @@
-import axios from 'axios'
 import qs from 'qs'
-import { FC, useContext, useEffect, useRef, useState } from 'react'
+import { FC, useContext, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { SearchContext } from '../../app/App'
@@ -19,29 +18,15 @@ import {
   SortT,
   toggleDescOrder,
 } from '../../redux/slice/filterSlice'
-import { RootState } from '../../redux/store'
-
-type PizzaT = {
-  id: number
-  imageUrl: string
-  title: string
-  types: number[]
-  sizes: number[]
-  price: number
-  category: number
-  rating: number
-}
+import { fetchPizzas } from '../../redux/slice/pizzasSlice'
+import { AppDispatch, RootState } from '../../redux/store'
 
 type HomePT = {}
 
 export const Home: FC<HomePT> = ({}) => {
   const { search } = useContext(SearchContext)
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-
-  const [pizzas, setPizzas] = useState<PizzaT[]>([])
-
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const dispatch: AppDispatch = useDispatch()
 
   const isRequestSend = useRef<boolean>(false)
   const isAppMount = useRef<boolean>(false)
@@ -52,6 +37,8 @@ export const Home: FC<HomePT> = ({}) => {
     descOrder,
     currentPage,
   } = useSelector((state: RootState) => state.filter)
+
+  const { items, status, error } = useSelector((state: RootState) => state.pizzas)
 
   const changeCategoryId = (id: number) => {
     dispatch(setCategoryId(id))
@@ -65,20 +52,20 @@ export const Home: FC<HomePT> = ({}) => {
   const changeCurrentPage = (page: number) => {
     dispatch(setCurrentPage(page))
   }
-  const getPizzas = () => {
+  const getPizzas = async () => {
     const order = `order=${descOrder ? 'desc' : 'asc'}`
     const category = categoryId ? `category=${categoryId}` : ''
     const sort = sortType.property
     const searchValue = search ? `&title=${search}` : ''
-    setIsLoading(true)
-    axios
-      .get<PizzaT[]>(
-        `https://64d38ae867b2662bf3dc6592.mockapi.io/api/items?page=${currentPage}&limit=4&${order}&${category}&sortBy=${sort}${searchValue}`,
-      )
-      .then(response => {
-        setPizzas(response.data)
-        setIsLoading(false)
-      })
+    const action = fetchPizzas({
+      order,
+      category,
+      sort,
+      searchValue,
+      currentPage,
+    })
+
+    dispatch(action)
   }
 
   useEffect(() => {
@@ -127,13 +114,18 @@ export const Home: FC<HomePT> = ({}) => {
         />
       </div>
       <h2 className="content__title">All pizzas</h2>
-      <Paginator changePage={changeCurrentPage} />
-      {!pizzas.length && <ErrorBlock title={'Not found'} description={''} />}
-      <div className="content__items">
-        {isLoading
-          ? [...new Array(4)].map((_, i) => <Skeleton key={i} />)
-          : pizzas.map(el => <PizzaBlock key={el.id} {...el} />)}
-      </div>
+      {status === 'error' ? (
+        <ErrorBlock title={error} description={''} />
+      ) : (
+        <>
+          <Paginator changePage={changeCurrentPage} />
+          <div className="content__items">
+            {status === 'loading'
+              ? [...new Array(4)].map((_, i) => <Skeleton key={i} />)
+              : items.map(el => <PizzaBlock key={el.id} {...el} />)}
+          </div>
+        </>
+      )}
     </div>
   )
 }
