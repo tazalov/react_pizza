@@ -3,18 +3,24 @@ import { createSlice } from '@reduxjs/toolkit'
 
 type PizzaT = {
   id: number
-  imageUrl: string
   title: string
+  imageUrl: string
   price: number
   size: number
   dough: string
   count: number
 }
 
-type PizzaAT = Omit<PizzaT, 'count'>
+export type PizzaAT = Omit<PizzaT, 'count'>
+
+type ChangeT = {
+  change: 'incr' | 'decr'
+}
+
+type RemoveProductAT = PizzaAT & ChangeT
 
 export type CartST = {
-  totalPrice: 0
+  totalPrice: number
   items: PizzaT[]
 }
 
@@ -28,22 +34,51 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addProduct: (state, action: PayloadAction<PizzaAT>) => {
-      const findItem = state.items.find(
-        el =>
-          el.title === action.payload.title &&
-          el.dough === action.payload.dough &&
-          el.size === action.payload.size,
+      const { id, dough, size } = action.payload
+      const findIndex = state.items.findIndex(
+        el => el.id === id && el.dough === dough && el.size === size,
       )
-      if (findItem) {
-        findItem.count++
+      if (findIndex !== -1) {
+        state.items[findIndex].count++
       } else {
         state.items.push({ ...action.payload, count: 1 })
       }
       state.totalPrice += action.payload.price
     },
-    removeProduct: (state, action: PayloadAction<{ id: number; price: number }>) => {
-      state.items.filter(el => el.id !== action.payload.id)
-      state.totalPrice -= action.payload.price
+    removeProduct: (state, action: PayloadAction<PizzaAT>) => {
+      const { id, dough, size } = action.payload
+      const findIndex = state.items.findIndex(
+        el => el.id === id && el.dough === dough && el.size === size,
+      )
+
+      if (findIndex !== -1) {
+        const removedItem = state.items[findIndex]
+        state.items.splice(findIndex, 1)
+        state.totalPrice -= removedItem.price * removedItem.count
+      }
+    },
+    incrCountProduct: (state, action: PayloadAction<RemoveProductAT>) => {
+      const { id, dough, size, change } = action.payload
+      const findIndex = state.items.findIndex(
+        el => el.id === id && el.dough === dough && el.size === size,
+      )
+
+      if (findIndex !== -1) {
+        const itemToUpdate = state.items[findIndex]
+
+        if (change === 'incr') {
+          itemToUpdate.count++
+          state.totalPrice += itemToUpdate.price
+        } else {
+          if (itemToUpdate.count > 1) {
+            itemToUpdate.count--
+            state.totalPrice -= itemToUpdate.price
+          } else {
+            state.items.splice(findIndex, 1)
+            state.totalPrice -= itemToUpdate.price
+          }
+        }
+      }
     },
     clearCart: state => {
       state.items = []
@@ -52,6 +87,6 @@ export const cartSlice = createSlice({
   },
 })
 
-export const { addProduct, removeProduct, clearCart } = cartSlice.actions
+export const { addProduct, removeProduct, incrCountProduct, clearCart } = cartSlice.actions
 
 export default cartSlice.reducer

@@ -37,7 +37,7 @@ export const PizzaBlock: FC<PizzaBlockPT> = ({ id, title, price, imageUrl, sizes
       title,
       price,
       imageUrl,
-      size: sizeType,
+      size: sizes[sizeType],
       dough: doughTypeName[doughType],
       count: 0,
     }
