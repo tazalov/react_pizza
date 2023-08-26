@@ -17,7 +17,7 @@ export const fetchPizzas = createAsyncThunk<PizzaT[], ParamsAT>(
     const { order, category, sort, searchValue, currentPage } = params
     try {
       const { data } = await pizzasAPI.get<PizzaT[]>(
-        `items?page=${currentPage}&limit=4&${order}&${category}&sortBy=${sort}${searchValue}`,
+        `items?page=${currentPage}&limit=4${order}${category}${sort}${searchValue}`,
       )
       return data
     } catch (error) {

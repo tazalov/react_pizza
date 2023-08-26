@@ -71,13 +71,8 @@ export const cartSlice = createSlice({
           itemToUpdate.count++
           state.totalPrice += itemToUpdate.price
         } else {
-          if (itemToUpdate.count > 1) {
-            itemToUpdate.count--
-            state.totalPrice -= itemToUpdate.price
-          } else {
-            state.items.splice(findIndex, 1)
-            state.totalPrice -= itemToUpdate.price
-          }
+          itemToUpdate.count--
+          state.totalPrice -= itemToUpdate.price
         }
       }
     },

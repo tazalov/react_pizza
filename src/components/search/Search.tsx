@@ -2,7 +2,7 @@ import debounce from 'lodash.debounce'
 import { ChangeEvent, FC, useCallback, useRef, useState } from 'react'
 import closeIcon from '../../assets/img/icons8-close.svg'
 import searchIcon from '../../assets/img/icons8-search.svg'
-import { setSearchValue } from '../../redux/slice/filterSlice'
+import { setCurrentPage, setSearchValue } from '../../redux/slice/filterSlice'
 import { useAppDispatch } from '../../redux/store'
 import s from './Search.module.scss'
 
@@ -12,7 +12,10 @@ export const Search: FC = () => {
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   const updateSearchValue = useCallback(
-    debounce(str => dispatch(setSearchValue(str)), 300),
+    debounce(str => {
+      dispatch(setSearchValue(str))
+      dispatch(setCurrentPage(1))
+    }, 300),
     [],
   )
 

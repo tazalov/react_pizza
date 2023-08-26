@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { FC, useEffect, useRef } from 'react'
+import { FC, useCallback, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Categories } from '../../components/categories/Categories'
@@ -38,23 +38,27 @@ export const Home: FC = () => {
   } = useSelector(selectFilter)
   const { items, status, error } = useSelector(selectPizzas)
 
-  const changeCategoryId = (id: number) => {
+  const changeCategoryId = useCallback((id: number) => {
     dispatch(setCategoryId(id))
     dispatch(setCurrentPage(1))
-  }
-  const changeSortType = (sort: SortT) => {
+  }, [])
+
+  const changeSortType = useCallback((sort: SortT) => {
     dispatch(setSortType(sort))
-  }
-  const changeDescOrder = () => {
+  }, [])
+
+  const changeDescOrder = useCallback(() => {
     dispatch(toggleDescOrder())
-  }
-  const changeCurrentPage = (page: number) => {
+  }, [])
+
+  const changeCurrentPage = useCallback((page: number) => {
     dispatch(setCurrentPage(page))
-  }
+  }, [])
+
   const getPizzas = async () => {
-    const order = `order=${descOrder ? 'desc' : 'asc'}`
-    const category = categoryId ? `category=${categoryId}` : ''
-    const sort = sortType.property
+    const order = `&order=${descOrder ? 'desc' : 'asc'}`
+    const category = categoryId ? `&category=${categoryId}` : ''
+    const sort = `&sortBy=${sortType.property}`
     const searchValue = search ? `&title=${search}` : ''
     dispatch(
       fetchPizzas({

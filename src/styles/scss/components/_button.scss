@@ -30,7 +30,17 @@
     background-color: darken($orange, 8%);
   }
 
-  &:active {
+  &:disabled {
+    background-color: transparent;
+    border: 1px solid grey;
+    svg {
+      path {
+        fill: grey;
+      }
+    }
+  }
+
+  &:not([disabled]):active {
     background-color: darken($orange, 12%);
     transform: translateY(1px);
   }
@@ -69,7 +79,7 @@
       }
     }
 
-    &:hover {
+    &:not([disabled]):hover {
       background-color: $orange;
 
       &,
@@ -84,7 +94,7 @@
       }
     }
 
-    &:active {
+    &:not([disabled]):active {
       background-color: darken($orange, 8%);
     }
   }
