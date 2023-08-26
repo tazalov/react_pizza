@@ -11,17 +11,20 @@ type ParamsAT = {
   currentPage: number
 }
 
-export const fetchPizzas = createAsyncThunk('pizzas/fetchPizzas', async (params: ParamsAT) => {
-  const { order, category, sort, searchValue, currentPage } = params
-  try {
-    const { data } = await pizzasAPI.get<PizzaT[]>(
-      `items?page=${currentPage}&limit=4&${order}&${category}&sortBy=${sort}${searchValue}`,
-    )
-    return data
-  } catch (error) {
-    throw error
-  }
-})
+export const fetchPizzas = createAsyncThunk<PizzaT[], ParamsAT>(
+  'pizzas/fetchPizzas',
+  async params => {
+    const { order, category, sort, searchValue, currentPage } = params
+    try {
+      const { data } = await pizzasAPI.get<PizzaT[]>(
+        `items?page=${currentPage}&limit=4&${order}&${category}&sortBy=${sort}${searchValue}`,
+      )
+      return data
+    } catch (error) {
+      throw error
+    }
+  },
+)
 
 export type PizzaT = {
   id: number
@@ -34,7 +37,7 @@ export type PizzaT = {
   rating: number
 }
 
-export type PizzasST = {
+export interface PizzasST {
   items: PizzaT[]
   status: 'loading' | 'success' | 'error'
   error: string

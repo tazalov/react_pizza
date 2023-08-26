@@ -1,13 +1,14 @@
 import { FC } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import arrowLeft from '../../assets/img/grey-arrow-left.svg'
 import { EmptyCart } from '../../components/empty-cart/EmptyCart'
 import { PizzaBlockCart } from '../../components/pizza-block-cart/PizzaBlockCart'
 import { clearCart, selectCart } from '../../redux/slice/cartSlice'
+import { useAppDispatch } from '../../redux/store'
 
 export const Cart: FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const removeAllItemsInCart = () => {
     if (window.confirm('Are you sure you want to remove all pizzas?')) {

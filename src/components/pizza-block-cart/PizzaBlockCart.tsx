@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { useDispatch } from 'react-redux'
 import { incrCountProduct, PizzaAT, removeProduct } from '../../redux/slice/cartSlice'
+import { useAppDispatch } from '../../redux/store'
 
 type PizzaBlockCartPT = {
   id: number
@@ -21,7 +21,7 @@ export const PizzaBlockCart: FC<PizzaBlockCartPT> = ({
   size,
   count,
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const currentPizza: PizzaAT = {
     id,

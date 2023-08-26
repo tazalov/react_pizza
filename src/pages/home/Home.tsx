@@ -1,6 +1,6 @@
 import qs from 'qs'
 import { FC, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Categories } from '../../components/categories/Categories'
 import { Paginator } from '../../components/common/paginator/Paginator'
@@ -19,10 +19,10 @@ import {
   toggleDescOrder,
 } from '../../redux/slice/filterSlice'
 import { fetchPizzas, selectPizzas } from '../../redux/slice/pizzasSlice'
-import { AppDispatch } from '../../redux/store'
+import { useAppDispatch } from '../../redux/store'
 
 export const Home: FC = () => {
-  const dispatch: AppDispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -40,6 +40,7 @@ export const Home: FC = () => {
 
   const changeCategoryId = (id: number) => {
     dispatch(setCategoryId(id))
+    dispatch(setCurrentPage(1))
   }
   const changeSortType = (sort: SortT) => {
     dispatch(setSortType(sort))
@@ -55,14 +56,15 @@ export const Home: FC = () => {
     const category = categoryId ? `category=${categoryId}` : ''
     const sort = sortType.property
     const searchValue = search ? `&title=${search}` : ''
-    const action = fetchPizzas({
-      order,
-      category,
-      sort,
-      searchValue,
-      currentPage,
-    })
-    dispatch(action)
+    dispatch(
+      fetchPizzas({
+        order,
+        category,
+        sort,
+        searchValue,
+        currentPage,
+      }),
+    )
   }
 
   useEffect(() => {
@@ -116,7 +118,7 @@ export const Home: FC = () => {
         <ErrorBlock title={error} description={''} />
       ) : items.length ? (
         <>
-          <Paginator changePage={changeCurrentPage} />
+          {categoryId === 0 && <Paginator changePage={changeCurrentPage} />}
           <div className="content__items">
             {status === 'loading'
               ? [...new Array(4)].map((_, i) => <Skeleton key={i} />)

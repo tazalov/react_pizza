@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { addProduct, selectCountItemsInCart } from '../../redux/slice/cartSlice'
+import { useAppDispatch } from '../../redux/store'
 
 type PizzaBlockPT = {
   id: number
@@ -16,7 +17,7 @@ type PizzaBlockPT = {
 export const PizzaBlock: FC<PizzaBlockPT> = ({ id, title, price, imageUrl, sizes, types }) => {
   const doughTypeName = ['thin', 'thick']
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const addedCount = useSelector(selectCountItemsInCart(id))
 

@@ -17,7 +17,7 @@ export type FilterST = {
   currentPage: number
 }
 
-export type SetFilterAT = {
+export interface SetFilterAT {
   page: string
   category: string
   sort: SortT

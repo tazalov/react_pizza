@@ -20,7 +20,7 @@ type ChangeT = {
 
 type RemoveProductAT = PizzaAT & ChangeT
 
-export type CartST = {
+export interface CartST {
   totalPrice: number
   items: PizzaT[]
 }
