@@ -1,36 +1,13 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../store'
-
-type PizzaT = {
-  id: number
-  title: string
-  imageUrl: string
-  price: number
-  size: number
-  dough: string
-  count: number
-}
-
-export type PizzaAT = Omit<PizzaT, 'count'>
-
-type ChangeT = {
-  change: 'incr' | 'decr'
-}
-
-type RemoveProductAT = PizzaAT & ChangeT
-
-export interface CartST {
-  totalPrice: number
-  items: PizzaT[]
-}
+import { CartST, PizzaAT, RemoveProductAT } from './types'
 
 const initialState: CartST = {
   totalPrice: 0,
   items: [],
 }
 
-export const cartSlice = createSlice({
+export const slice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
@@ -83,18 +60,6 @@ export const cartSlice = createSlice({
   },
 })
 
-//! ---------- selectors ----------
-export const selectCart = (state: RootState) => state.cart
+export const { addProduct, removeProduct, incrCountProduct, clearCart } = slice.actions
 
-export const selectCountItemsInCart = (id: number) => (state: RootState) => {
-  let count = 0
-  state.cart.items.forEach(el => {
-    if (el.id === id) count += el.count
-  })
-  return count
-}
-//! ---------- selectors ----------
-
-export const { addProduct, removeProduct, incrCountProduct, clearCart } = cartSlice.actions
-
-export default cartSlice.reducer
+export default slice.reducer

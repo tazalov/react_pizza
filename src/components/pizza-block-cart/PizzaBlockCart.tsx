@@ -1,5 +1,6 @@
 import { FC } from 'react'
-import { incrCountProduct, PizzaAT, removeProduct } from '../../redux/slice/cartSlice'
+import { incrCountProduct, removeProduct } from '../../redux/slice/cart/slice'
+import { PizzaAT } from '../../redux/slice/cart/types'
 import { useAppDispatch } from '../../redux/store'
 
 type PizzaBlockCartPT = {

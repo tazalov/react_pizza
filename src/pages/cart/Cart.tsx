@@ -4,7 +4,8 @@ import { NavLink } from 'react-router-dom'
 import arrowLeft from '../../assets/img/grey-arrow-left.svg'
 import { EmptyCart } from '../../components/empty-cart/EmptyCart'
 import { PizzaBlockCart } from '../../components/pizza-block-cart/PizzaBlockCart'
-import { clearCart, selectCart } from '../../redux/slice/cartSlice'
+import { selectCart } from '../../redux/slice/cart/selectors'
+import { clearCart } from '../../redux/slice/cart/slice'
 import { useAppDispatch } from '../../redux/store'
 
 export const Cart: FC = () => {

@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { addProduct, selectCountItemsInCart } from '../../redux/slice/cartSlice'
+import { selectCountItemsInCart } from '../../redux/slice/cart/selectors'
+import { addProduct } from '../../redux/slice/cart/slice'
 import { useAppDispatch } from '../../redux/store'
 
 type PizzaBlockPT = {

@@ -1,6 +1,6 @@
 import { useWhyDidYouUpdate } from 'ahooks'
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { SortT } from '../../redux/slice/filterSlice'
+import { SortT } from '../../redux/slice/filter/types'
 
 type SortedPT = {
   type: SortT

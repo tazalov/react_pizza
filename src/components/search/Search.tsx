@@ -2,7 +2,7 @@ import debounce from 'lodash.debounce'
 import { ChangeEvent, FC, useCallback, useRef, useState } from 'react'
 import closeIcon from '../../assets/img/icons8-close.svg'
 import searchIcon from '../../assets/img/icons8-search.svg'
-import { setCurrentPage, setSearchValue } from '../../redux/slice/filterSlice'
+import { setCurrentPage, setSearchValue } from '../../redux/slice/filter/slice'
 import { useAppDispatch } from '../../redux/store'
 import s from './Search.module.scss'
 

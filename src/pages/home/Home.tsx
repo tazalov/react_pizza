@@ -8,17 +8,17 @@ import { ErrorBlock } from '../../components/errorBlock/ErrorBlock'
 import { PizzaBlock } from '../../components/pizza-block/PizzaBlock'
 import { Skeleton } from '../../components/pizza-block/Skeleton'
 import { Sorted, sortName } from '../../components/sorted/Sorted'
+import { selectFilter } from '../../redux/slice/filter/selectors'
 import {
-  selectFilter,
   setCategoryId,
   setCurrentPage,
-  SetFilterAT,
   setFilterData,
   setSortType,
-  SortT,
   toggleDescOrder,
-} from '../../redux/slice/filterSlice'
-import { fetchPizzas, selectPizzas } from '../../redux/slice/pizzasSlice'
+} from '../../redux/slice/filter/slice'
+import { SetFilterAT, SortT } from '../../redux/slice/filter/types'
+import { selectPizzas } from '../../redux/slice/pizzas/selectors'
+import { fetchPizzas } from '../../redux/slice/pizzas/slice'
 import { useAppDispatch } from '../../redux/store'
 
 export const Home: FC = () => {

@@ -1,15 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import pizzasAPI from '../../api/api'
-import { RootState } from '../store'
-
-type ParamsAT = {
-  order: string
-  category: string
-  sort: string
-  searchValue: string
-  currentPage: number
-}
+import pizzasAPI from '../../../api/api'
+import { ParamsAT, PizzasST, PizzaT } from './types'
 
 export const fetchPizzas = createAsyncThunk<PizzaT[], ParamsAT>(
   'pizzas/fetchPizzas',
@@ -26,30 +18,13 @@ export const fetchPizzas = createAsyncThunk<PizzaT[], ParamsAT>(
   },
 )
 
-export type PizzaT = {
-  id: number
-  imageUrl: string
-  title: string
-  types: number[]
-  sizes: number[]
-  price: number
-  category: number
-  rating: number
-}
-
-export interface PizzasST {
-  items: PizzaT[]
-  status: 'loading' | 'success' | 'error'
-  error: string
-}
-
 const initialState: PizzasST = {
   items: [],
   status: 'loading',
   error: '',
 }
 
-export const pizzasSlice = createSlice({
+export const slice = createSlice({
   name: 'pizzas',
   initialState,
   reducers: {
@@ -74,10 +49,6 @@ export const pizzasSlice = createSlice({
   },
 })
 
-//! ---------- selectors ----------
-export const selectPizzas = (state: RootState) => state.pizzas
-//! ---------- selectors ----------
+export const { setItems } = slice.actions
 
-export const { setItems } = pizzasSlice.actions
-
-export default pizzasSlice.reducer
+export default slice.reducer
