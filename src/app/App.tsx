@@ -1,18 +1,23 @@
+import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { Preloader } from '../components'
 import { MainLayout } from '../layout/MainLayout'
-import { Cart } from '../pages/cart/Cart'
-import { Error } from '../pages/error/Error'
-import { Home } from '../pages/home/Home'
 import '../styles/scss/app.scss'
+
+const Home = lazy(() => import('../pages/home'))
+const Cart = lazy(() => import('../pages/cart'))
+const Error = lazy(() => import('../pages/error'))
 
 export const App = () => {
   return (
-    <Routes>
-      <Route path={'/'} element={<MainLayout />}>
-        <Route path={''} element={<Home />} />
-        <Route path={'cart'} element={<Cart />} />
-        <Route path={'*'} element={<Error />} />
-      </Route>
-    </Routes>
+    <Suspense fallback={<Preloader />}>
+      <Routes>
+        <Route path={'/'} element={<MainLayout />}>
+          <Route path={''} element={<Home />} />
+          <Route path={'cart'} element={<Cart />} />
+          <Route path={'*'} element={<Error />} />
+        </Route>
+      </Routes>
+    </Suspense>
   )
 }

@@ -2,12 +2,15 @@ import qs from 'qs'
 import { FC, useCallback, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Categories } from '../../components/categories/Categories'
-import { Paginator } from '../../components/common/paginator/Paginator'
-import { ErrorBlock } from '../../components/errorBlock/ErrorBlock'
-import { PizzaBlock } from '../../components/pizza-block/PizzaBlock'
-import { Skeleton } from '../../components/pizza-block/Skeleton'
-import { Sorted, sortName } from '../../components/sorted/Sorted'
+import {
+  Categories,
+  ErrorBlock,
+  Paginator,
+  PizzaBlock,
+  Skeleton,
+  Sorted,
+  sortName,
+} from '../../components'
 import { selectFilter } from '../../redux/slice/filter/selectors'
 import {
   setCategoryId,
