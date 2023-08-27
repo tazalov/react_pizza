@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_pizza=self.webpackChunkreact_pizza||[]).push([[214],{1214:function(n,t,i){i.r(t),i.d(t,{default:function(){return a}});var e=i(1255),u=i(184),a=function(){return(0,u.jsx)("div",{children:(0,u.jsx)(e.i,{title:"Page not found",description:"In my opinion, you did not find what you wanted"})})}}}]);
+//# sourceMappingURL=214.b004c284.chunk.js.map
